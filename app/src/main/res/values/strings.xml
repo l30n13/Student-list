@@ -17,6 +17,6 @@
     <string name="title_activity_update_name">update_name</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_edit_page">EditPage</string>
+    <string name="title_activity_edit_page">Edit Page</string>
 
 </resources>

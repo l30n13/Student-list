@@ -48,12 +48,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 COLUMN_DEPARTMENT_ID + " TEXT " +
                 "); ";
         db.execSQL(query);
+        db.close();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENTS);
         onCreate(db);
+        db.close();
     }
 
 
@@ -75,6 +77,38 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public void updateStudent(Students students, String _id) {
+        /*String query = "UPDATE " + TABLE_STUDENTS + " SET " +
+                COLUMN_NAME + "=" + students.get_name() + ", " +
+                COLUMN_REG_NO + "=" + students.get_regNo() + ", " +
+                COLUMN_PHONE_NO + "=" + students.get_phoneNo() + ", " +
+                COLUMN_EMAIL + "=" + students.get_email() + ", " +
+                COLUMN_BIRTHDAY + "=" + students.get_birthday() + ", " +
+                COLUMN_GENDER + "=" + students.get_gender() + ", " +
+                COLUMN_GENDER_ID + "=" + students.get_gender_id() + ", " +
+                COLUMN_DEPARTMENT + "=" + students.get_department() + ", " +
+                COLUMN_DEPARTMENT_ID + "=" + students.get_department_id() + ", " +
+                "WHERE " + COLUMN_ID + "=" + Integer.valueOf(_id) + ";";
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(query);*/
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_NAME, students.get_name());
+        values.put(COLUMN_PHONE_NO, students.get_phoneNo());
+        values.put(COLUMN_REG_NO, students.get_regNo());
+        values.put(COLUMN_EMAIL, students.get_email());
+        values.put(COLUMN_BIRTHDAY, students.get_birthday());
+        values.put(COLUMN_GENDER, students.get_gender());
+        values.put(COLUMN_GENDER_ID, students.get_gender_id());
+        values.put(COLUMN_DEPARTMENT, students.get_department());
+        values.put(COLUMN_DEPARTMENT_ID, students.get_department_id());
+        db.update(TABLE_STUDENTS, values, COLUMN_ID + "=" + _id, null);
+
+        db.close();
+    }
+
     public void deleteStudent(String studentName, int _id) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "DELETE FROM " + TABLE_STUDENTS + " WHERE " +
@@ -83,6 +117,11 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Retrieve all the students form database
+     *
+     * @return ArrayList of all student names
+     */
     public ArrayList[] getStudentList() {
         ArrayList<String> studentNames = new ArrayList<>();
         ArrayList<String> studentIDs = new ArrayList<>();
@@ -109,6 +148,13 @@ public class DBHandler extends SQLiteOpenHelper {
         return new ArrayList[]{studentNames, studentIDs};
     }
 
+    /**
+     * Retrieve all information for details about a student(except gender id and department id)
+     *
+     * @param studentName Name of the student
+     * @param _id         Database id of a specific student
+     * @return Details of a student in String[]
+     */
     public String[] getStudentDetails(String studentName, int _id) {
         String[] studentDetails = new String[8];
         SQLiteDatabase db = getWritableDatabase();
@@ -132,6 +178,43 @@ public class DBHandler extends SQLiteOpenHelper {
                 studentDetails[4] = c.getString(c.getColumnIndex(COLUMN_REG_NO));
                 studentDetails[5] = c.getString(c.getColumnIndex(COLUMN_PHONE_NO));
                 studentDetails[6] = c.getString(c.getColumnIndex(COLUMN_EMAIL));
+                studentDetails[7] = c.getString(c.getColumnIndex(COLUMN_ID));
+            }
+        }
+        db.close();
+        return studentDetails;
+    }
+
+    /**
+     * Retrieve all information for details about a student
+     *
+     * @param studentName name of the student
+     * @param _id         Database id of a specific student
+     * @return Details of a student in String[]
+     */
+    public String[] getStudentFullDetails(String studentName, int _id) {
+        String[] studentDetails = new String[8];
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_STUDENTS + " WHERE " +
+                COLUMN_ID + "=\"" + _id + "\" AND " + COLUMN_NAME + "=\"" + studentName + "\";";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        if (c.getCount() == 1) {
+            if (c.getString(c.getColumnIndex(COLUMN_NAME)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_REG_NO)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_PHONE_NO)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_EMAIL)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_BIRTHDAY)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_GENDER_ID)) != null &&
+                    c.getString(c.getColumnIndex(COLUMN_DEPARTMENT_ID)) != null) {
+                studentDetails[0] = c.getString(c.getColumnIndex(COLUMN_NAME));
+                studentDetails[1] = c.getString(c.getColumnIndex(COLUMN_EMAIL));
+                studentDetails[2] = c.getString(c.getColumnIndex(COLUMN_REG_NO));
+                studentDetails[3] = c.getString(c.getColumnIndex(COLUMN_PHONE_NO));
+                studentDetails[4] = c.getString(c.getColumnIndex(COLUMN_GENDER_ID));
+                studentDetails[5] = c.getString(c.getColumnIndex(COLUMN_DEPARTMENT_ID));
+                studentDetails[6] = c.getString(c.getColumnIndex(COLUMN_BIRTHDAY));
                 studentDetails[7] = c.getString(c.getColumnIndex(COLUMN_ID));
             }
         }

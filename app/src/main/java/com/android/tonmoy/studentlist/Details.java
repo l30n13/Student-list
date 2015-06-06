@@ -22,6 +22,8 @@ public class Details extends ActionBarActivity {
     TextView phoneNo;
     TextView email;
 
+    DBHandler dbHandler;
+
     private String[] details;
 
     @Override
@@ -47,10 +49,11 @@ public class Details extends ActionBarActivity {
         phoneNo.setText(this.details[5]);
         email.setText(this.details[6]);
 
+        dbHandler = new DBHandler(this, null, null, 1);
+
     }
 
     public void onClickDelete(View view) {
-        DBHandler dbHandler = new DBHandler(this, null, null, 1);
         dbHandler.deleteStudent(this.details[0], Integer.valueOf(this.details[7]));
         Toast.makeText(this, this.details[0] + " deleted successfully", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, All_Student.class);
@@ -58,7 +61,10 @@ public class Details extends ActionBarActivity {
     }
 
     public void onClickEdit(View view) {
-
+        String details[] = dbHandler.getStudentFullDetails(this.details[0], Integer.valueOf(this.details[7]));
+        Intent i = new Intent(this, EditPage.class);
+        i.putExtra("Details", details);
+        startActivity(i);
     }
 
     @Override
