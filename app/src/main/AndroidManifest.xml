@@ -28,6 +28,10 @@
             android:name=".Details"
             android:label="@string/title_activity_details" >
         </activity>
+        <activity
+            android:name=".EditPage"
+            android:label="@string/title_activity_edit_page" >
+        </activity>
     </application>
 
 </manifest>
