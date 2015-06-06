@@ -9,7 +9,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/newStudent"
-        android:icon="@drawable/add"
+        android:icon="@mipmap/ic_action_add"
         android:orderInCategory="100"
         android:title="@string/add_new"
         app:showAsAction="always" />

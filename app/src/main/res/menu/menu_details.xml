@@ -9,7 +9,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/goBack"
-        android:icon="@drawable/back"
+        android:icon="@mipmap/ic_action_navigation_arrow_back"
         android:orderInCategory="100"
         android:title="@string/goBack"
         app:showAsAction="always" />
