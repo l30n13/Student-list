@@ -1,5 +1,6 @@
 package com.android.tonmoy.studentlist;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Handler;
 
-public class splash_screen extends ActionBarActivity {
+public class splash_screen extends Activity {
 
     private static final int SPLASH_TIME_OUT = 1000;
 
